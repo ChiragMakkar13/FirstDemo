@@ -22,6 +22,13 @@ public class AppTest {
 		assertEquals(10, i);
 		System.out.println("Passed Test");
 	}
+	@Test
+	public void test2() {
+		int j = addition.addTwoInt(5, 5);
+		
+		assertEquals(10, j);
+		System.out.println("Passed 2nd Test");
+	}
 
 	/** * destroy the object */
 	@After
