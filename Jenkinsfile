@@ -1,10 +1,22 @@
-node{
-   stage('SCM Checkout'){
-     git 'https://github.com/ChiragMakkar13/FirstDemo'
-   }
-   stage('Compile-Package'){
-    
-      def mvnHome =  tool name: 'Maven_Home', type: 'maven'   
-      sh "${mvnHome}/bin/mvn package"
-   }
+pipeline {
+    agent any
+    stages {
+        stage ('Clone') {
+            steps {
+                git branch: 'master', url: "https://github.com/jfrog/project-examples.git"
+            }
+        }
+       
+         stage ('Exec Maven') {
+            steps {
+                rtMavenRun (
+                    tool: MAVEN_TOOL, // Tool name from Jenkins configuration
+                    pom: 'maven-example/pom.xml',
+                    goals: 'clean install',
+                    deployerId: "MAVEN_DEPLOYER",
+                    resolverId: "MAVEN_RESOLVER"
+                )
+            }
+        }
+    }
 }
