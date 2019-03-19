@@ -1,32 +1,21 @@
-
 pipeline {
     agent any
-
     stages {
-        stage ('Compile Stage') {
-
+        stage ('Clone') {
             steps {
-                withMaven(maven : 'Maven_Home') {
-                    sh 'mvn clean compile'
-                }
+                git branch: 'master', url: "https://github.com/ChiragMakkar13/FirstDemo.git"
             }
         }
-
-        stage ('Testing Stage') {
-
+       
+         stage ('Exec Maven') {
             steps {
-                withMaven(maven : 'Maven_Home') {
-                    sh 'mvn test'
-                }
-            }
-        }
-
-
-        stage ('Deployment Stage') {
-            steps {
-                withMaven(maven : 'Maven_Home') {
-                    sh 'mvn deploy'
-                }
+                rtMavenRun (
+                    tool: Maven_Home, // Tool name from Jenkins configuration
+                    pom: 'maven-example/pom.xml',
+                    goals: 'clean install',
+                    deployerId: "MAVEN_DEPLOYER",
+                    resolverId: "MAVEN_RESOLVER"
+                )
             }
         }
     }
